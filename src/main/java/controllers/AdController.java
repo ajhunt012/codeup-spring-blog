@@ -37,7 +37,7 @@ public class AdController {
         Ad ad = adDao.findById(id).get();
 
         // if no images, assign a placeholder
-        if(ad.getImages().isEmpty()) {
+        if(((Ad) ad).getImages().isEmpty()) {
             // create new list of AdImage objects to assign to the Ad
             List<AdImage> images = new ArrayList<>();
             //
@@ -53,17 +53,29 @@ public class AdController {
     }
 
     @GetMapping("/ads/create")
-    public String adCreateForm(){
+    public String adCreateForm(Model model){
+        model.addAttribute("newAd", new Ad());
         return "ads/create";
     }
 
     @PostMapping(path = "/ads/create")
-    public String adCreateSubmit(@RequestParam String title, @RequestParam String description){
-        Ad newAd = new Ad(title, description);
-
-        adDao.save(newAd);
-
+    public String adCreateSubmit(@ModelAttribute Ad ad){
+        adDao.save(ad);
         return "redirect:/ads";
     }
+
+    @GetMapping("/ads/{id}/edit")
+    public String showEditForm(@PathVariable long id, Model model) {
+        model.addAttribute("ad", adDao.findById(id).get());
+        return "ads/edit";
+    }
+
+    @PostMapping("/ads/{id}/edit")
+    public String editAd(@PathVariable long id, @ModelAttribute Ad ad) {
+        adDao.save(ad);
+        return "redirect:/ads";
+    }
+
+
 
 }
