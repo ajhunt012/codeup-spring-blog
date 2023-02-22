@@ -1,5 +1,4 @@
 package models;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -11,13 +10,28 @@ public class AdImage {
     @Column(columnDefinition = "TEXT")
     private String imageURL;
 
-@ManyToOne
-@JoinColumn(name = "ad_id" )
-private Ad ad;
+    @ManyToOne
+//    @JoinColumn(name = "ad_id")
+    private Ad ad;
 
-    public AdImage() {
+    public AdImage(){}
+
+    public AdImage(String imageURL, Ad ad) {
+        this.imageURL = imageURL;
+        this.ad = ad;
     }
 
+    public AdImage(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public Ad getAd() {
+        return ad;
+    }
+
+    public void setAd(Ad ad) {
+        this.ad = ad;
+    }
 
     public long getId() {
         return id;
@@ -34,6 +48,4 @@ private Ad ad;
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
     }
-
-
 }
