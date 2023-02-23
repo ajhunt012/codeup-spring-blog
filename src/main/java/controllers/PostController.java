@@ -1,39 +1,58 @@
 package controllers;
 
+
+import models.Post;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
+import services.PostDaoService;
+
 
 @Controller
 public class PostController {
 
+    private final PostDaoService postService;
+
+    public PostController(PostDaoService postService) {
+        this.postService = postService;
+    }
+
     @GetMapping("/posts")
-    @ResponseBody
-    public String postsIndex() {
-        return "This is the posts index page.";
+    public String showPosts(Model model){
+        model.addAttribute("allPosts", postService.getAllPosts());
+        return "posts/index";
     }
 
     @GetMapping("/posts/{id}")
-    @ResponseBody
-    public String viewPost(@PathVariable long id) {
-        return "This is post number " + id + ".";
+    public String singlePost(@PathVariable long id, Model model){
+        model.addAttribute("post", postService.getPostById(id));
+        return "posts/show";
     }
 
     @GetMapping("/posts/create")
-    @ResponseBody
-    public String createPostForm() {
-        return "This is the form for creating a new post.";
+    public String postCreateForm(Model model){
+        model.addAttribute("post", new Post());
+        return "posts/create";
     }
 
-    @PostMapping("/posts/create")
-    @ResponseBody
-    public String createPost() {
-        return "A new post has been created.";
+    @PostMapping(path = "/posts/create")
+    public String postCreateSubmit(@ModelAttribute Post post){
+        postService.savePost(post);
+        return "redirect:/posts";
     }
 
-//    @RequestMapping(value = "/posts/create", method = RequestMethod.POST)
-//    @ResponseBody
-//    public String postCreateSubmit() {
-//        return "A new post has been created.";
-//    }
+    @GetMapping("/posts/{id}/edit")
+    public String showEditForm(@PathVariable long id, Model model) {
+        Post postToEdit = postService.getPostById(id);
+        model.addAttribute("post", postToEdit);
+        return "posts/edit";
+    }
+
+    @PostMapping("/posts/{id}/edit")
+    public String submitPostChanges(@PathVariable long id, @ModelAttribute Post post) {
+        postService.savePost(post);
+        return "redirect:/posts/" + id;
+    }
+
+
 }
-

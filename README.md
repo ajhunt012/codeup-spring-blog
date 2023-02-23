@@ -17,5 +17,6 @@ Bootstrap 5
 -Java 17
 -MySQL 8
 -IntelliJ
+-Sendgrid API
 
 In order to configure ou MySQL Database credentials, please refer to the `example.properties` file for necessary information. 

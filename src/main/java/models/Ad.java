@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-
 @Table(name="ads")
 
 public class Ad {
@@ -29,6 +28,11 @@ public class Ad {
             inverseJoinColumns = {@JoinColumn(name = "category_id")}
     )
     private List<AdCategory> categories;
+
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private User owner;
+
 
     public Ad(){};
 
