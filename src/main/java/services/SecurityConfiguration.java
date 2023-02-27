@@ -57,18 +57,8 @@ public class SecurityConfiguration {
                         "/ads/{id}/edit", // only authenticated users can edit ads
                         "/ads/create"
                 )
-                .authenticated()
-        ;
-//        return http.build();
-//        http
-//                .csrf().disable()
-//                .authorizeHttpRequests()
-//                .requestMatchers("/posts/**").authenticated()
-//                .anyRequest().permitAll()
-//                .and()
-//                .httpBasic()
-//                .and()
-//                .formLogin();
+                .authenticated();
+
         return http.build();
     }
 }
