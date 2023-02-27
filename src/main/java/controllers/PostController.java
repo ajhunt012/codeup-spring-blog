@@ -5,16 +5,18 @@ import models.Post;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+import services.EmailService;
 import services.PostDaoService;
 
 
 @Controller
 public class PostController {
-
     private final PostDaoService postService;
+    private final EmailService emailService;
 
-    public PostController(PostDaoService postService) {
+    public PostController(PostDaoService postService, EmailService emailService) {
         this.postService = postService;
+        this.emailService = emailService;
     }
 
     @GetMapping("/posts")
@@ -37,7 +39,12 @@ public class PostController {
 
     @PostMapping(path = "/posts/create")
     public String postCreateSubmit(@ModelAttribute Post post){
+        System.out.println(post.getId());
+        System.out.println(post.getTitle());
+        System.out.println(post.getBody());
+        System.out.println(post.getUser());
         postService.savePost(post);
+        emailService.sendTextEmail(post);
         return "redirect:/posts";
     }
 

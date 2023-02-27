@@ -34,7 +34,6 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
                 /* Login configuration */
                 .formLogin()
                 .loginPage("/login")
@@ -43,22 +42,22 @@ public class SecurityConfiguration {
                 /* Logout configuration */
                 .and()
                 .logout()
-                .logoutSuccessUrl("/login?logout") // append a query string value
+                .logoutSuccessUrl("/")
                 /* Pages that can be viewed without having to log in */
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/", "/ads", "/posts", "/login?logout") // anyone can see the home and the ads pages
+                .requestMatchers("/", "/ads", "/posts", "/sign-up", "/ads/{id}") // anyone can see the home and the ads pages
                 .permitAll()
                 /* Pages that require authentication */
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers(
-                        "/posts/create", // only authenticated users can create ads
-                        "/ads/{id}/edit", // only authenticated users can edit ads
-                        "/ads/create"
-                )
-                .authenticated();
+                        "/posts/**", // only authenticated users can create ads
+                        "/ads/**" // only authenticated users can edit ads
 
+                )
+                .authenticated()
+        ;
         return http.build();
     }
 }

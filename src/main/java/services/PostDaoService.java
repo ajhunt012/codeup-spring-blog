@@ -45,6 +45,7 @@ public class PostDaoService {
         postRepository.deleteById(id);
     }
 
-
-
+    public UserRepository getUserRepository() {
+        return userRepository;
+    }
 }
