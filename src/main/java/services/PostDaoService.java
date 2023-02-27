@@ -1,6 +1,8 @@
 package services;
 
 import models.Post;
+import models.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import repositories.PostRepository;
 import repositories.UserRepository;
@@ -20,7 +22,8 @@ public class PostDaoService {
 
     // CREATE
     public void savePost(Post post) {
-        post.setUser(userRepository.findById(1L).get());
+        User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        post.setUser(loggedInUser);
         postRepository.save(post);
     }
 
